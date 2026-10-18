@@ -1,0 +1,103 @@
+openapi: 3.0.3
+info:
+  title: Parks API
+  version: 1.0.0
+  description: REST API for Parks
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Park:
+      type: object
+      properties:
+        name: { type: string, example: Central Park }
+        address: { type: string, example: 1 Main St }
+        length_of_bicycle_path: { type: number, example: 5.5 }
+        price: { type: number, example: 10 }
+    Credentials:
+      type: object
+      required: [email, password]
+      properties:
+        email: { type: string, example: user@example.com }
+        password: { type: string, example: password123 }
+
+paths:
+  /:
+    get:
+      summary: Health check
+      responses:
+        '200': { description: OK }
+
+  /auth/register:
+    post:
+      summary: User registration
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/Credentials' }
+      responses:
+        '201': { description: User created }
+        '409': { description: User already exists }
+
+  /auth/login:
+    post:
+      summary: Login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/Credentials' }
+      responses:
+        '200': { description: JWT }
+        '401': { description: Incorrect data }
+
+  /parks:
+    get:
+      summary: List of parks
+      parameters:
+        - { name: search, in: query, schema: { type: string } }
+        - name: sortBy
+          in: query
+          schema: { type: string, enum: [price, length_of_bicycle_path, name] }
+        - { name: sortDesc, in: query, schema: { type: string, enum: ['true', 'false'] } }
+      responses:
+        '200': { description: List of parks and total length of paths }
+    post:
+      summary: Add a park
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/Park' }
+      responses:
+        '200': { description: Park added }
+        '401': { description: Missing or invalid token }
+
+  /parks/{id}:
+    put:
+      summary: Upgrade the fleet
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: integer } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/Park' }
+      responses:
+        '200': { description: Park updated }
+        '401': { description: Missing or invalid token }
+    delete:
+      summary: Delete park
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: integer } }
+      responses:
+        '200': { description: Park deleted }
+        '401': { description: Missing or invalid token }

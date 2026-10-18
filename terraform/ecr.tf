@@ -9,5 +9,5 @@ resource "aws_ecr_repository" "lab1_repo" {
 }
 
 output "ecr_repository_url" {
-  value = aws_ecr_repository.lab1_repo
+  value = aws_ecr_repository.lab1_repo.repository_url
 }

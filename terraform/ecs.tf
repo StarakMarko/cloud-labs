@@ -32,22 +32,18 @@ resource "aws_ecs_task_definition" "app" {
       { name = "DB_HOST", value = aws_db_instance.mysql.address },
       { name = "DB_USER", value = var.db_username },
       { name = "DB_PASSWORD", value = var.db_password },
-      { name = "DB_NAME", value = aws_db_instance.mysql.db_name }
+      { name = "DB_NAME", value = aws_db_instance.mysql.db_name },
+      { name = "JWT_SECRET", value = var.jwt_secret }
     ]
     logConfiguration = {
       logDriver = "awslogs"
       options = {
-        "awslogs-group"         = "/ecs/${var.project}"
+        "awslogs-group"         = aws_cloudwatch_log_group.app.name
         "awslogs-region"        = var.region
-        "awslogs-stream-prefix" = "ecs"
+        "awslogs-stream-prefix" = "app"
       }
     }
   }])
-}
-
-resource "aws_cloudwatch_log_group" "ecs_logs" {
-  name              = "/ecs/${var.project}"
-  retention_in_days = 7
 }
 
 resource "aws_ecs_service" "app_service" {
