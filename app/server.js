@@ -53,16 +53,27 @@ const auth = (req, res, next) => {
 db.connect(err => {
     if (err) {
         console.error('error', err);
-    } else {
-        console.log('ok');
-        db.query(`
-            CREATE TABLE IF NOT EXISTS users (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                email VARCHAR(255) NOT NULL UNIQUE,
-                password_hash VARCHAR(255) NOT NULL
-            )
-        `, e => { if (e) console.error('users table error', e); });
+        return;
     }
+    console.log('ok');
+
+    db.query(`
+        CREATE TABLE IF NOT EXISTS users (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            email VARCHAR(255) NOT NULL UNIQUE,
+            password_hash VARCHAR(255) NOT NULL
+        )
+    `, e => { if (e) console.error('users table error', e); });
+
+    db.query(`
+        CREATE TABLE IF NOT EXISTS parks (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            name VARCHAR(255) NOT NULL,
+            address VARCHAR(255),
+            length_of_bicycle_path DECIMAL(10,2),
+            price DECIMAL(10,2)
+        )
+    `, e => { if (e) console.error('parks table error', e); });
 });
 
 
