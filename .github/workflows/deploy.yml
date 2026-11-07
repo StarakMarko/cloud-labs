@@ -41,3 +41,6 @@ jobs:
 
     - name: Redeploy ECS service
       run: aws ecs update-service --cluster lab1-cluster --service lab1-service --force-new-deployment --region eu-central-1 --no-cli-pager
+        
+    - name: Redeploy worker service
+      run: aws ecs update-service --cluster lab1-cluster --service lab1-worker --force-new-deployment --region eu-central-1 --no-cli-pager

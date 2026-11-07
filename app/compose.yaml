@@ -21,6 +21,9 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+  
+  redis:
+    image: redis:7-alpine
 
 volumes:
   db_data:

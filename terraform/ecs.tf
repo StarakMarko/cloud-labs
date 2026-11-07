@@ -1,5 +1,10 @@
 resource "aws_ecs_cluster" "main" {
   name = "${var.project}-cluster"
+
+  setting {
+    name  = "containerInsights"
+    value = "enabled"
+  }
 }
 
 resource "aws_iam_role" "ecs_execution_role" {
@@ -33,7 +38,10 @@ resource "aws_ecs_task_definition" "app" {
       { name = "DB_USER", value = var.db_username },
       { name = "DB_PASSWORD", value = var.db_password },
       { name = "DB_NAME", value = aws_db_instance.mysql.db_name },
-      { name = "JWT_SECRET", value = var.jwt_secret }
+      { name = "JWT_SECRET", value = var.jwt_secret },
+      { name = "REDIS_HOST", value = aws_elasticache_cluster.redis.cache_nodes[0].address },
+      { name = "CACHE_ENABLED", value = tostring(var.cache_enabled) },
+      { name = "CACHE_TTL", value = "30" }
     ]
     logConfiguration = {
       logDriver = "awslogs"
@@ -63,6 +71,10 @@ resource "aws_ecs_service" "app_service" {
     target_group_arn = aws_lb_target_group.app.arn
     container_name   = "app-container"
     container_port   = 8000
+  }
+
+  lifecycle {
+    ignore_changes = [desired_count]
   }
 
   depends_on = [aws_lb_listener.http]
