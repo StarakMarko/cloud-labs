@@ -1,10 +1,15 @@
-# Lab 1
+# Cloud Labs
 
 REST API для керування парками (Node.js + Express + MySQL), запакований у Docker і розгорнутий в AWS через Terraform з автоматичним деплоєм із GitHub Actions.
 
 **Публічна адреса:** [http://lab1-alb-2027386291.eu-central-1.elb.amazonaws.com/](http://lab1-alb-2027386291.eu-central-1.elb.amazonaws.com/)
 
 **Документація API (Swagger UI):** [http://lab1-alb-2027386291.eu-central-1.elb.amazonaws.com/docs](http://lab1-alb-2027386291.eu-central-1.elb.amazonaws.com/docs)
+
+---
+
+## Лабораторна робота 2: Автоматичне масштабування, моніторинг та кешування
+
 
 ## Структура проєкту
 

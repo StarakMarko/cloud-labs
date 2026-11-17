@@ -19,8 +19,8 @@ resource "aws_iam_role" "github" {
         }
         StringLike = {
           "token.actions.githubusercontent.com:sub" = [
-            "repo:StarakMarko/clouds-lab1:*",
-            "repo:StarakMarko@181093264/clouds-lab1@1402084838:*"
+            "repo:StarakMarko/cloud-labs:*",
+            "repo:StarakMarko@181093264/cloud-labs@1402084838:*"
           ]
         }
       }
