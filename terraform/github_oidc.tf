@@ -47,7 +47,9 @@ resource "aws_iam_role_policy" "github_deploy" {
           "ecr:InitiateLayerUpload",
           "ecr:UploadLayerPart",
           "ecr:CompleteLayerUpload",
-          "ecr:PutImage"
+          "ecr:PutImage",
+          "ecr:BatchGetImage",
+          "ecr:GetDownloadUrlForLayer"
         ]
         Resource = aws_ecr_repository.lab1_repo.arn
       },

@@ -27,6 +27,7 @@ resource "aws_ecs_task_definition" "app" {
   cpu                      = "256"
   memory                   = "512"
   execution_role_arn       = aws_iam_role.ecs_execution_role.arn
+  task_role_arn            = aws_iam_role.ecs_task_role.arn
 
   container_definitions = jsonencode([{
     name         = "app-container"
@@ -41,7 +42,9 @@ resource "aws_ecs_task_definition" "app" {
       { name = "JWT_SECRET", value = var.jwt_secret },
       { name = "REDIS_HOST", value = aws_elasticache_cluster.redis.cache_nodes[0].address },
       { name = "CACHE_ENABLED", value = tostring(var.cache_enabled) },
-      { name = "CACHE_TTL", value = "30" }
+      { name = "CACHE_TTL", value = "30" },
+      { name = "QUEUE_URL", value = var.queue_enabled ? aws_sqs_queue.jobs.url : "" },
+      { name = "AWS_REGION", value = var.region }
     ]
     logConfiguration = {
       logDriver = "awslogs"
